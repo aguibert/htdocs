@@ -35,9 +35,17 @@ require_once('dbutil.php');
 		</div>
 
 		<div id="useCases" class="row">
-			<div class="col-md-10">
+			<div class="col-md-3">
+				<h2>Librarian use cases</h2>
 				<input id="addBookText" type="text" placeholder="BookName,Author,qty"> <button id="addBookBtn" type="button">Add a book</button><br>
 				<input id="rmvBookText" type="text" placeholder="Bookid"> <button id="rmvBookBtn" type="button">Remove book</button><br>
+				<input id="viewUserHistory" type="text" placeholder="Username"> <button id="viewLoansBtn" type="button">View history</button><br>
+			</div>
+			<div class="col-md-7">
+				<h2>Loan History</h2>
+				<table id="historyTable" class="table table-condensed">
+					<TR class='info'><TH colspan='3'>Copy ID</TH><TH colspan='3'>Due Date</TH><TH colspan='3'>Date Returned</TH><TR>
+				</table>
 			</div>
 		</div>
 		<br><br><br>
@@ -67,7 +75,20 @@ function updateLib(){
 			})
 		} 
 	});
-}
+};
+$('#viewLoansBtn').click(function(){
+	var input = $('#viewUserHistory').val();
+
+	$.ajax({
+		type : "GET",
+		url	 : "router.php",
+		data : {"function" :"viewLoans", "user"	:input},
+		success	: function(result){
+			$('#historyTable').html(result);
+		}
+	});
+	$('#viewUserHistory').val("");
+});
 $('#addBookBtn').click(function(){
 	var input = $("#addBookText").val();
 /*	var reg = /^[a-zA-Z0-9 ]+[=]{1}[ ]*[0-9]{1,2}$/;

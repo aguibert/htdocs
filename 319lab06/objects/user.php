@@ -28,6 +28,15 @@ class User
 		return $this->_bIsLib;
 	}
 
+	public static function viewLoanHistory($userName){
+		$conn = DB::getConnection();
+		$result = mysqli_query($conn, "SELECT * from loanHistory where Groupnumber=10 and Username='".$userName."'");
+		echo "<TR class='info'><TH>Copy ID</TH><TH>Due Date</TH><TH>Date Returned</TH><TR>";
+		while($row = mysqli_fetch_array($result)){
+			echo "<TR><TD><B>".$row['Copyid']."<B></TD><TD>".$row['Duedate']."</TD><TD>".$row['Returnedondate']."</TD></TR>";
+		}
+	}
+
 	public static function createRentalRecord($userid, $copyid){
 		$conn = DB::getConnection();
 		$query = "INSERT INTO loanHistory (Groupnumber, Username, Copyid, Duedate) ".

@@ -17,7 +17,7 @@ class Library
 			// for each book
 			$books = Shelf::getBooksOnShelf($shelfID);
 				// print book name
-			$rowStr = "<TR><TD class='active'>".($i + 1)."</TD>";
+			$rowStr = "<TR><TD class='active'><b>".($i + 1)."<b></TD>";
 			for($j = 0; $j < Shelf::MAX_SIZE; $j++){
 				if(count($books) > $j && $book = $books[$j])
 					$rowStr .= "<TD class='book'>". $book->getCopyID() ."</TD>";

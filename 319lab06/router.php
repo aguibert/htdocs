@@ -33,6 +33,11 @@ if(isset($_GET['function'])){
 		User::returnBook($_GET['userID'], $_GET['copyID']);
 		return;
 	}
+	if($function == 'viewLoans'){
+		$userName = $_GET['user'];
+		User::viewLoanHistory($userName);
+		return;
+	}
 }
 
 ?>
