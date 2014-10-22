@@ -19,11 +19,10 @@ class Library
 				// print book name
 			$rowStr = "<TR><TD class='active'>".($i + 1)."</TD>";
 			for($j = 0; $j < Shelf::MAX_SIZE; $j++){
-				if($book = $books[$j])
+				if(count($books) > $j && $book = $books[$j])
 					$rowStr .= "<TD class='book'>". $book->getCopyID() ."</TD>";
-				else{
+				else
 					$rowStr .= "<TD></TD>";
-				}
 			}
 			$rowStr .= "</TR>";
 			// Only print row if there is content
@@ -75,7 +74,7 @@ class Library
 			$toDelete = $row['Copyid'];
 			$result = mysqli_query($conn, "SELECT * from shelves where Groupnumber=10 and Copyid=".$toDelete);
 			if($row = mysqli_fetch_array($result)){
-				deleteCopyFromShelf($toDelete);
+				self::deleteCopyFromShelf($toDelete);
 			}else{
 				echo "<script type='text/javascript'>alert('Cannot delete a book that is not currently in the library');</script>";
 				return;
