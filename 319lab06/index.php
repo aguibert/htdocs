@@ -6,8 +6,7 @@ if(isset($_POST['username'], $_POST['password'])){
 	$user = $_POST['username'];
 	$pass = $_POST['password'];
 	if(User::checkUserAndPass($user, $pass)){
-		$_SESSION['username'] = $user;
-		$_SESSION['bIsLib'] = User::isLibrarian($user);
+		$_SESSION['user'] = serialize(User::getUser($user));
 		header('Location: home.php');
 	} else
 		echo "<script>alert('Username or password incorrect!')</script>";

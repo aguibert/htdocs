@@ -22,6 +22,12 @@ class DB
 		return self::$conn;
 	}
 
+	function query($queryStr){
+		$conn = self::getConnection();
+		$result = mysqli_query($conn, $queryStr);
+		return $result;
+	}
+
 	function showTable(){
 		$conn = self::getConnection();
 

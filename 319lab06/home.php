@@ -3,9 +3,7 @@ require_once('objects/user.php');
 require_once('objects/book.php');
 require_once('objects/library.php');
 session_start();
-$user = User::getUser($_SESSION['username']);
-$isLib = $user->isLib();
-require_once('dbutil.php');
+$user = unserialize($_SESSION['user']);
 ?>
 
 <html>
@@ -133,7 +131,7 @@ $('#rmvBookBtn').click(function(){
 });
 $('#checkoutBookBtn').click(function(){
 	var input = $("#checkoutBookText").val();
-	var username = "<?php echo $_SESSION['username'] ?>";
+	var username = "<?php echo $user->isLib() ?>";
 	// TODO validate input on server side
 	$.ajax({
 		type : "GET",
@@ -147,7 +145,7 @@ $('#checkoutBookBtn').click(function(){
 });
 $('#returnBookBtn').click(function(){
 	var input = $("#returnBookText").val();
-	var username = "<?php echo $_SESSION['username'] ?>";
+	var username = "<?php echo $user->isLib() ?>";
 	$.ajax({
 		type : "GET",
 		url  : "router.php",
@@ -160,7 +158,7 @@ $('#returnBookBtn').click(function(){
 })
 $(document).ready(function(){
 	updateLib();
-	if(<?php echo $isLib ?> == 1)
+	if(<?php echo $user->isLib() ?> == 0)
 		$("#studentUseCases").css("display","none");
 	else
 		$("#useCases").css("display","none");

@@ -27,6 +27,17 @@ class User
 	public function isLib(){
 		return $this->_bIsLib;
 	}
+	public function getFirst(){
+		return $this->_first;
+	}
+
+	public function __sleep(){
+		return array("_usernmae", "_password", "_email", "_phone", "_bIsLib", "_first", "_last");
+	}
+
+	public function __wakeup(){
+
+	}
 
 	public static function viewLoanHistory($userName){
 		$conn = DB::getConnection();
@@ -56,11 +67,11 @@ class User
 		$query = "UPDATE loanHistory SET Returnedondate=CURDATE() ".
 			"WHERE Groupnumber=10 and Username='".$userid."' and Copyid=".$copyid;
 		$updateCount = mysqli_query($conn, $query);
-		if($updateCount != 1){
-			echo "Expected 1 row to be effect, intead: ". $updateCount;
+		// TODO need to check for null result and avoid adding to shelf in that case
+		if($updateCount == false){
+			echo "Error: ". mysqli_error($conn);
 			return;
 		}
-
 		// Now put the book back on the shelf
 		Library::addCopyToShelf($copyid);
 	}
