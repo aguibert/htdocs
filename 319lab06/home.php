@@ -25,14 +25,14 @@ $user = unserialize($_SESSION['user']);
 			</div>
 		</div>
 
-		<div id="studentUseCases" class="row">
+		<div id="studentUseCases" class="row" style="display:none">
 			<div class="col-md-10">
 				<input id="checkoutBookText" type="text" placeholder="Copyid"> <button id="checkoutBookBtn" type="button">Checkout a book</button><br>
 				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button">Return a book</button><br>
 			</div>
 		</div>
 
-		<div id="useCases" class="row">
+		<div id="teacherUseCases" class="row" style="display:none">
 			<div class="col-md-3">
 				<h2>Librarian use cases</h2>
 				<input id="addBookText" type="text" placeholder="BookName,Author,qty"> <button id="addBookBtn" type="button">Add a book</button><br>
@@ -158,10 +158,10 @@ $('#returnBookBtn').click(function(){
 })
 $(document).ready(function(){
 	updateLib();
-	if(<?php echo $user->isLib() ?> == 0)
-		$("#studentUseCases").css("display","none");
+	if(<?php echo $user->isLib() ?>)
+		$("#teacherUseCases").css("display","");
 	else
-		$("#useCases").css("display","none");
+		$("#studentUseCases").css("display","");
 });
 </script>
 </html>

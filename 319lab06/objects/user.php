@@ -31,14 +31,6 @@ class User
 		return $this->_first;
 	}
 
-	public function __sleep(){
-		return array("_usernmae", "_password", "_email", "_phone", "_bIsLib", "_first", "_last");
-	}
-
-	public function __wakeup(){
-
-	}
-
 	public static function viewLoanHistory($userName){
 		$conn = DB::getConnection();
 		$result = mysqli_query($conn, "SELECT * from loanHistory where Groupnumber=10 and Username='".$userName."'");
