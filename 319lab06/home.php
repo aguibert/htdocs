@@ -136,7 +136,7 @@ $('#addBookBtn').click(function(){
 });
 $('#checkoutBookBtn').click(function(){
 	var input = $("#modal-copyid").val();
-	var username = "<?php echo $user->isLib() ?>";
+	var username = "<?php echo $user->getUsername() ?>";
 	// TODO validate input on server side
 	$.ajax({
 		type : "GET",
@@ -149,7 +149,7 @@ $('#checkoutBookBtn').click(function(){
 });
 $('#returnBookBtn').click(function(){
 	var input = $("#returnBookText").val();
-	var username = "<?php echo $user->isLib() ?>";
+	var username = "<?php echo $user->getUsername() ?>";
 	$.ajax({
 		type : "GET",
 		url  : "router.php",
