@@ -67,20 +67,10 @@ class Library
 		mysqli_query($conn, "INSERT INTO shelves VALUES(10, ".$shelfID.", ". $copyID .")");
 	}
 
-	public static function deleteCopy($bookId){
+	public static function deleteCopy($copyID){
 		$conn = DB::getConnection();
-		$result = mysqli_query($conn, "SELECT Copyid from bookscopy where Groupnumber=10 and Bookid=".$bookId." ORDER BY Copyid DESC");
-		if($row = mysqli_fetch_array($result)){
-			$toDelete = $row['Copyid'];
-			$result = mysqli_query($conn, "SELECT * from shelves where Groupnumber=10 and Copyid=".$toDelete);
-			if($row = mysqli_fetch_array($result)){
-				self::deleteCopyFromShelf($toDelete);
-			}else{
-				echo "<script type='text/javascript'>alert('Cannot delete a book that is not currently in the library');</script>";
-				return;
-			}
-			mysqli_query($conn, "DELETE from bookscopy where Groupnumber=10 and Copyid=".$toDelete);
-		}
+		mysqli_query($conn, "DELETE FROM bookscopy WHERE Groupnumber=10 and Copyid=".$copyID);
+		self::deleteCopyFromShelf($copyID);
 	}
 
 	public static function deleteCopyFromShelf($copyId){

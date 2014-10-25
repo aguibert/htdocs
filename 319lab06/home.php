@@ -8,10 +8,6 @@ $user = unserialize($_SESSION['user']);
 
 <html>
 <head>
-	<!-- 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">	
--->
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -32,7 +28,7 @@ $user = unserialize($_SESSION['user']);
 
 		<div class="row student" style="display:none">
 			<div class="col-md-10">
-				<input id="checkoutBookText" type="text" placeholder="Copyid"> <button id="checkoutBookBtn" type="button">Checkout a book</button><br>
+				<h2>Student use cases</h2>
 				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button">Return a book</button><br>
 			</div>
 		</div>
@@ -41,7 +37,6 @@ $user = unserialize($_SESSION['user']);
 			<div class="col-md-3">
 				<h2>Librarian use cases</h2>
 				<input id="addBookText" type="text" placeholder="BookName,Author,qty"> <button id="addBookBtn" type="button">Add a book</button><br>
-				<input id="rmvBookText" type="text" placeholder="Bookid"> <button id="rmvBookBtn" type="button">Remove book</button><br>
 				<input id="viewUserHistory" type="text" placeholder="Username"> <button id="viewLoansBtn" type="button">View history</button><br>
 			</div>
 			<div class="col-md-7">
@@ -53,7 +48,7 @@ $user = unserialize($_SESSION['user']);
 		</div>
 		<br><br><br>
 	</div>
-	<!-- For when a table cell is clicked -->
+	<!-- Modal for when a table cell is clicked -->
 	<div id="mymodal" class="modal fade">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -66,7 +61,8 @@ $user = unserialize($_SESSION['user']);
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	        <button id="deleteBookBtn" type="button" class="btn btn-primary teacher" data-dismiss="modal">Delete</button>
+	        <button id="deleteBookBtn" type="button" class="btn btn-danger teacher" style="display:none" data-dismiss="modal">Delete</button>
+	        <button id="checkoutBookBtn" type="button" class="btn btn-primary student" style="display:none" data-dismiss="modal">Checkout</button>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
@@ -104,7 +100,6 @@ function updateLib(){
 };
 function removeBook(){
 	var input = $("#modal-copyid").val();
-	console.log("REMOVE BOOK " + input);
 	$.ajax({
 		type : "GET",
 		url  : "router.php",
@@ -139,11 +134,8 @@ $('#addBookBtn').click(function(){
 	});
 	$("#addBookText").val("");
 });
-$('#rmvBookBtn').click(function(){
-	removeBook();
-});
 $('#checkoutBookBtn').click(function(){
-	var input = $("#checkoutBookText").val();
+	var input = $("#modal-copyid").val();
 	var username = "<?php echo $user->isLib() ?>";
 	// TODO validate input on server side
 	$.ajax({
@@ -154,7 +146,6 @@ $('#checkoutBookBtn').click(function(){
 			updateLib();
 		}
 	});
-	$("#checkoutBookText").val("");
 });
 $('#returnBookBtn').click(function(){
 	var input = $("#returnBookText").val();
