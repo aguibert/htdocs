@@ -20,9 +20,9 @@ if(isset($_GET['function'])){
 	if($function == 'getBookInfo'){
 		$book = Library::getBook($_GET['copyID']);
 		echo "Title:\t\t".$book->getTitle().
-			 "\nAuthor:\t".$book->getAuthor().
-			 "\nBook ID:\t".$book->getID().
-			 "\nCopy ID:\t".$book->getCopyID();
+			 "<BR>Author:\t".$book->getAuthor().
+			 "<BR>Book ID:\t".$book->getID().
+			 "<BR>Copy ID:\t".$book->getCopyID();
 	 	return;
 	}
 	if($function == 'checkoutBook'){

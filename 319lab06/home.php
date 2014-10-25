@@ -8,8 +8,13 @@ $user = unserialize($_SESSION['user']);
 
 <html>
 <head>
+	<!-- 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">	
+-->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default" role="navigation">
@@ -25,14 +30,14 @@ $user = unserialize($_SESSION['user']);
 			</div>
 		</div>
 
-		<div id="studentUseCases" class="row" style="display:none">
+		<div class="row student" style="display:none">
 			<div class="col-md-10">
 				<input id="checkoutBookText" type="text" placeholder="Copyid"> <button id="checkoutBookBtn" type="button">Checkout a book</button><br>
 				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button">Return a book</button><br>
 			</div>
 		</div>
 
-		<div id="teacherUseCases" class="row" style="display:none">
+		<div class="row teacher" style="display:none">
 			<div class="col-md-3">
 				<h2>Librarian use cases</h2>
 				<input id="addBookText" type="text" placeholder="BookName,Author,qty"> <button id="addBookBtn" type="button">Add a book</button><br>
@@ -42,25 +47,48 @@ $user = unserialize($_SESSION['user']);
 			<div class="col-md-7">
 				<h2>Loan History</h2>
 				<table id="historyTable" class="table table-condensed">
-					<TR class='info'><TH colspan='3'>Copy ID</TH><TH colspan='3'>Due Date</TH><TH colspan='3'>Date Returned</TH><TR>
+					<TR class='info'><TH >Copy ID</TH><TH >Due Date</TH><TH >Date Returned</TH><TR>
 				</table>
 			</div>
 		</div>
 		<br><br><br>
 	</div>
+	<!-- For when a table cell is clicked -->
+	<div id="mymodal" class="modal fade">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <input id="modal-copyid" type="hidden" value="">
+	      <div class="modal-body">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        <button id="deleteBookBtn" type="button" class="btn btn-primary teacher" data-dismiss="modal">Delete</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 </body>
 <script>
+function showModal(title, body, copyID){
+    	$('#mymodal .modal-title').html(title);
+    	$('#mymodal .modal-body').html(body);
+    	$('#modal-copyid').val(copyID);
+        $('#mymodal').modal('show');
+}
 function getBookInfo(copyID){
 	$.ajax({
 		type  : "GET",
 		url   : "router.php",
 		data  : {"function": "getBookInfo","copyID": copyID},
 		success: function(result){
-			alert(result);
+			showModal("Information for book " + copyID, result, copyID);
 		}
 	});
 }
-
 function updateLib(){
 	$.ajax({
 		type : "GET",
@@ -74,9 +102,20 @@ function updateLib(){
 		} 
 	});
 };
+function removeBook(){
+	var input = $("#modal-copyid").val();
+	console.log("REMOVE BOOK " + input);
+	$.ajax({
+		type : "GET",
+		url  : "router.php",
+		data : {"function":"removeBook","copyID":input.trim()},
+		success : function(result){
+			updateLib();
+		}
+	});
+}
 $('#viewLoansBtn').click(function(){
 	var input = $('#viewUserHistory').val();
-
 	$.ajax({
 		type : "GET",
 		url	 : "router.php",
@@ -89,14 +128,6 @@ $('#viewLoansBtn').click(function(){
 });
 $('#addBookBtn').click(function(){
 	var input = $("#addBookText").val();
-/*	var reg = /^[a-zA-Z0-9 ]+[=]{1}[ ]*[0-9]{1,2}$/;
-	if(!reg.test(input)){
-		alert("Please enter in the form bookName=qty");
-		return;
-	}
-	var res = input.split("=");
-	lib.addBook(res[0].trim(), Number(res[1].trim()));
-	lib.showLib();*/
 	var res = input.split(",");
 	$.ajax({
 		type : "GET",
@@ -109,25 +140,7 @@ $('#addBookBtn').click(function(){
 	$("#addBookText").val("");
 });
 $('#rmvBookBtn').click(function(){
-	var input = $("#rmvBookText").val();
-	/*
-	var reg = /^[a-zA-Z0-9 ]+$/;
-	if(!reg.test(input)){
-		alert("Please enter a valid book name");
-		return;
-	}
-	lib.removeBook(input.trim());
-	lib.showLib();
-	*/
-	$.ajax({
-		type : "GET",
-		url  : "router.php",
-		data : {"function":"removeBook","copyID":input.trim()},
-		success : function(result){
-			updateLib();
-		}
-	});
-	$("#addBookText").val("");
+	removeBook();
 });
 $('#checkoutBookBtn').click(function(){
 	var input = $("#checkoutBookText").val();
@@ -159,9 +172,10 @@ $('#returnBookBtn').click(function(){
 $(document).ready(function(){
 	updateLib();
 	if(<?php echo $user->isLib() ?>)
-		$("#teacherUseCases").css("display","");
+		$(".teacher").css("display","");
 	else
-		$("#studentUseCases").css("display","");
+		$(".student").css("display","");
+	$('#deleteBookBtn').click(removeBook);
 });
 </script>
 </html>
