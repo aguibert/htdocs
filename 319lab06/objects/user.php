@@ -31,12 +31,20 @@ class User
 		return $this->_first;
 	}
 
-	public static function viewLoanHistory($userName){
+	public static function viewLoanHistory($userName, $exact){
 		$conn = DB::getConnection();
-		$result = mysqli_query($conn, "SELECT * from loanHistory where Groupnumber=10 and Username='".$userName."'");
-		echo "<TR class='info'><TH>Copy ID</TH><TH>Due Date</TH><TH>Date Returned</TH><TR>";
+		echo "<TR class='info'><TH>Copy ID</TH><TH>Username</TH><TH>Due Date</TH><TH>Date Returned</TH><TR>";
+		if(!$userName){
+			return;
+		}
+		$result;
+		if($exact == "true"){
+			$result = mysqli_query($conn, "SELECT * from loanHistory where Groupnumber=10 and Username='".$userName."'");
+		}else{
+			$result = mysqli_query($conn, "SELECT * from loanHistory where Groupnumber=10 and Username LIKE '".$userName."%'");
+		}
 		while($row = mysqli_fetch_array($result)){
-			echo "<TR><TD><B>".$row['Copyid']."<B></TD><TD>".$row['Duedate']."</TD><TD>".$row['Returnedondate']."</TD></TR>";
+			echo "<TR><TD><B>".$row['Copyid']."<B></TD><TD>".$row['Username']."</TD><TD>".$row['Duedate']."</TD><TD>".$row['Returnedondate']."</TD></TR>";
 		}
 	}
 

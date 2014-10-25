@@ -35,7 +35,8 @@ if(isset($_GET['function'])){
 	}
 	if($function == 'viewLoans'){
 		$userName = $_GET['user'];
-		User::viewLoanHistory($userName);
+		$exact = $_GET['exact'];
+		User::viewLoanHistory($userName, $exact);
 		return;
 	}
 }

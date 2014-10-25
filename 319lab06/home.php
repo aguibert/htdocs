@@ -43,9 +43,9 @@ $user = unserialize($_SESSION['user']);
 				<input id="viewUserHistory" type="text" placeholder="Username"> <button id="viewLoansBtn" type="button">View history</button><br>
 			</div>
 			<div class="col-md-7">
-				<h2>Loan History</h2>
+				<h2 id="loanHeader">Loan History</h2>
 				<table id="historyTable" class="table table-condensed">
-					<TR class='info'><TH >Copy ID</TH><TH >Due Date</TH><TH >Date Returned</TH><TR>
+					<TR class='info'><TH >Copy ID</TH><TH>Username</TH><TH >Due Date</TH><TH >Date Returned</TH><TR>
 				</table>
 			</div>
 		</div>
@@ -72,6 +72,17 @@ $user = unserialize($_SESSION['user']);
 	</div><!-- /.modal -->
 </body>
 <script>
+var socket;
+function init(){
+	try{
+		socket = new WebSocket("ws://localhost:8080/319lab06/server.php");
+		socket.onmessage = function(result){ 
+			$("#lib").html(result); 
+		};
+	}catch(ex){
+		alert(ex);
+	}
+}
 function showModal(title, body, copyID){
     	$('#mymodal .modal-title').html(title);
     	$('#mymodal .modal-body').html(body);
@@ -117,12 +128,23 @@ $('#viewLoansBtn').click(function(){
 	$.ajax({
 		type : "GET",
 		url	 : "router.php",
-		data : {"function" :"viewLoans", "user"	:input},
+		data : {"function" :"viewLoans", "user"	:input, "exact":"true"},
 		success	: function(result){
 			$('#historyTable').html(result);
 		}
 	});
 	$('#viewUserHistory').val("");
+});
+$('#viewUserHistory').keyup(function() {
+	var input = $('#viewUserHistory').val();
+	$.ajax({
+		type : "GET",
+		url	 : "router.php",
+		data : {"function" :"viewLoans", "user"	:input, "exact":"false"},
+		success	: function(result){
+			$('#historyTable').html(result);
+		}
+	});
 });
 $('#addBookBtn').click(function(){
 	var input = $("#addBookText").val();
@@ -167,6 +189,7 @@ $('#navbar-logout').click(function(){
 	window.location = window.location.pathname.replace("home.php", ""); 
 });
 $(document).ready(function(){
+	init();
 	updateLib();
 	if(<?php echo $user->isLib() ?>)
 		$(".teacher").css("display","");
