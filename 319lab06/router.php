@@ -39,6 +39,24 @@ if(isset($_GET['function'])){
 		User::viewLoanHistory($userName, $exact);
 		return;
 	}
+	if($function == 'validate'){
+		$bookName = $_GET['bookName'];
+		$author   = $_GET['author'];
+		$qty      = $_GET['qty'];
+		if(!ctype_alnum($bookName)){
+			echo "Invalid bookname: " .$bookName;
+			return;
+		}
+		if(!ctype_alnum($author)){
+			echo "Invalid author: " .$author; 
+			return;
+		}
+		if(!ctype_digit($qty)){
+			echo "Invalid qty: " .$qty;
+			return;
+		}
+		echo "PASSED";
+		return;
+	}	
 }
-
 ?>

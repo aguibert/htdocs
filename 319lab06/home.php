@@ -39,7 +39,10 @@ $user = unserialize($_SESSION['user']);
 		<div class="row teacher" style="display:none">
 			<div class="col-md-3">
 				<h2>Librarian use cases</h2>
-				<input id="addBookText" type="text" placeholder="BookName,Author,qty"> <button id="addBookBtn" type="button">Add a book</button><br>
+				<input id="addBookName" name="addBookName" type="text" placeholder="BookName"> <br>
+				<input id="addAuthor" name="addAuthor" type="text" placeholder="Author"><br>
+				<input id="addQty" name="addQty" type="text" placeholder="Qty">
+				<button id="addBookBtn" type="submit" value="addBook">Add a book</button>
 				<input id="viewUserHistory" type="text" placeholder="Username"> <button id="viewLoansBtn" type="button">View history</button><br>
 			</div>
 			<div class="col-md-7">
@@ -147,17 +150,35 @@ $('#viewUserHistory').keyup(function() {
 	});
 });
 $('#addBookBtn').click(function(){
-	var input = $("#addBookText").val();
-	var res = input.split(",");
+	var bookName = $("#addBookName").val();
+	var author 	 = $("#addAuthor").val();
+	var qty      = $("#addQty").val();
+	var validated = false;
 	$.ajax({
 		type : "GET",
 		url  : "router.php",
-		data : {"function":"addBook","title":res[0],"author":res[1],"qty":res[2]},
+		data : {"function":"validate","bookName":bookName,"author":author,"qty":qty},
+		async:   false,
+		success : function(result){
+			if(result == "PASSED")
+				validated = true;
+			else
+				alert(result);
+		}
+	})
+	if(!validated)
+		return;
+	$.ajax({
+		type : "GET",
+		url  : "router.php",
+		data : {"function":"addBook","title":bookName,"author":author,"qty":qty},
 		success : function(result){
 			updateLib();
 		}
 	});
-	$("#addBookText").val("");
+	$("#addBookName").val("");
+	$("#addAuthor").val("");
+	$("#addQty").val("");
 });
 $('#checkoutBookBtn').click(function(){
 	var input = $("#modal-copyid").val();
@@ -189,7 +210,7 @@ $('#navbar-logout').click(function(){
 	window.location = window.location.pathname.replace("home.php", ""); 
 });
 $(document).ready(function(){
-	init();
+	// init();
 	updateLib();
 	if(<?php echo $user->isLib() ?>)
 		$(".teacher").css("display","");

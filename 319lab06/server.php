@@ -27,8 +27,6 @@ while(true){
 /*****************************************************************************/
 /* funtions to help handle sockets                                           */
 /*****************************************************************************/
-
-
 function WebSocket($address,$port){
  	$master=socket_create(AF_INET, SOCK_STREAM, SOL_TCP)     or die("socket_create() failed");
  	socket_set_option($master, SOL_SOCKET, SO_REUSEADDR, 1)  or die("socket_option() failed");
