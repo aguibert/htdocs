@@ -13,8 +13,11 @@ $user = unserialize($_SESSION['user']);
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<nav class="navbar navbar-default" role="navigation">
-		<p class="navbar-text navbar-right" style="padding-right:1cm"><?php echo $user->getUsername() ?></p>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<ul class="nav navbar-nav navbar-right">
+	        <li><button id="navbar-logout" type="button" class="btn btn-danger navbar-btn ">Logout</button></li>
+			<li><h4 id="navbar-username" class="navbar-text" style="padding-right:1cm"><?php echo $user->getUsername() ?></h4></li>
+		</ul>
 	</nav>
 
 	<div class="col-md-offset-1">
@@ -159,7 +162,10 @@ $('#returnBookBtn').click(function(){
 		}
 	});
 	$("#returnBookText").val("");
-})
+});
+$('#navbar-logout').click(function(){
+	window.location = window.location.pathname.replace("home.php", ""); 
+});
 $(document).ready(function(){
 	updateLib();
 	if(<?php echo $user->isLib() ?>)
