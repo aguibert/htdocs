@@ -1,8 +1,10 @@
 <?php
-	$dbUsername = "u319all";
-	$dbPassword = "024IjLaMj4dI";
-	$dbServer = "mysql.cs.iastate.edu"; 
-	$dbName   = "db319all";
+
+// Constants for storing database credentials
+$dbUsername = "u319all";
+$dbPassword = "024IjLaMj4dI";
+$dbServer = "mysql.cs.iastate.edu"; 
+$dbName   = "db319all";
 
 class DB
 {

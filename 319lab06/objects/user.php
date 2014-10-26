@@ -21,6 +21,13 @@ class User
 		$this->_last     = $last;
 	}
 
+	public function __sleep(){
+		return array('_username', '_email', '_phone', '_bIsLib', '_first', '_last');
+	}
+
+	public function __wakeup(){
+	}
+
 	public function getUsername(){
 		return $this->_username;
 	}

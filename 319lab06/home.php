@@ -75,17 +75,6 @@ $user = unserialize($_SESSION['user']);
 	</div><!-- /.modal -->
 </body>
 <script>
-var socket;
-function init(){
-	try{
-		socket = new WebSocket("ws://localhost:8080/319lab06/server.php");
-		socket.onmessage = function(result){ 
-			$("#lib").html(result); 
-		};
-	}catch(ex){
-		alert(ex);
-	}
-}
 function showModal(title, body, copyID){
     	$('#mymodal .modal-title').html(title);
     	$('#mymodal .modal-body').html(body);
@@ -183,7 +172,6 @@ $('#addBookBtn').click(function(){
 $('#checkoutBookBtn').click(function(){
 	var input = $("#modal-copyid").val();
 	var username = "<?php echo $user->getUsername() ?>";
-	// TODO validate input on server side
 	$.ajax({
 		type : "GET",
 		url  : "router.php",
@@ -210,7 +198,6 @@ $('#navbar-logout').click(function(){
 	window.location = window.location.pathname.replace("home.php", ""); 
 });
 $(document).ready(function(){
-	// init();
 	updateLib();
 	if(<?php echo $user->isLib() ?>)
 		$(".teacher").css("display","");

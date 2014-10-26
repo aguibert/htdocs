@@ -105,7 +105,6 @@ class Library
 		} else{
 			return $shelfs[$curShelf];
 		}
-		// TODO check for when library is full
 	}
 
 	public static function getBook($copyID){

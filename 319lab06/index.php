@@ -1,4 +1,5 @@
 <?php
+
 include 'objects/user.php';
 session_start();	
 
@@ -11,6 +12,7 @@ if(isset($_POST['username'], $_POST['password'])){
 	} else
 		echo "<script>alert('Username or password incorrect!')</script>";
 }
+
 ?>
 
 <html>
