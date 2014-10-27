@@ -59,12 +59,28 @@ class User
 		$conn = DB::getConnection();
 		$query = "INSERT INTO loanHistory (Groupnumber, Username, Copyid, Duedate) ".
 		    "VALUES (10, '".$userid."', ".$copyid.", DATE_ADD(CURDATE(), INTERVAL 5 DAY))";
-		mysqli_query($conn, $query);
+		$result = mysqli_query($conn, $query);
+		return $result;
 	}
 
 	public static function checkoutBook($userid, $copyid){
-		self::createRentalRecord($userid, $copyid);
-		Library::deleteCopyFromShelf($copyid);
+		$res = self::createRentalRecord($userid, $copyid);
+		if($res)
+			Library::deleteCopyFromShelf($copyid);
+		else
+			echo "FAILED";
+	}
+
+	public static function viewCheckedOutBook($userName){
+		$conn = DB::getConnection();
+		echo "<TR class='info'><TH>Copy ID</TH><TH>Due Date</TH></TR>";
+		if(!$userName){
+			return;
+		}
+		$result = mysqli_query($conn, "SELECT * FROM loanHistory where Groupnumber=10 and Username='".$userName."' and Returnedondate is NULL");
+		while($row = mysqli_fetch_array($result)){
+			echo "<TR><TD><B>".$row['Copyid']."</B></TD><TD>".$row['Duedate']."</TD></TR>";
+		}
 	}
 
 	public static function returnBook($userid, $copyid){

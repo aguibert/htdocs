@@ -30,9 +30,15 @@ $user = unserialize($_SESSION['user']);
 		</div>
 
 		<div class="row student" style="display:none">
-			<div class="col-md-10">
+			<div class="col-md-5">
 				<h2>Student use cases</h2>
 				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button">Return a book</button><br>
+			</div>
+			<div class="col-md-5">
+				<h3>Outstanding rentals</h3>
+				<table id="checkOutTable" class="table table-condensed">
+					<TR><TH>Copy ID</TH><TH>Due Date</TH></TR>
+				</table>
 			</div>
 		</div>
 
@@ -115,6 +121,17 @@ function removeBook(){
 		}
 	});
 }
+function checkOutTable(){
+	var username = "<?php echo $user->getUsername() ?>";
+	$.ajax({
+		type : "GET",
+		url	 : "router.php",
+		data : {"function" :"viewCheckOut", "userID"	:username},
+		success	: function(result){
+			$('#checkOutTable').html(result);
+		}
+	});
+}
 $('#viewLoansBtn').click(function(){
 	var input = $('#viewUserHistory').val();
 	$.ajax({
@@ -177,7 +194,10 @@ $('#checkoutBookBtn').click(function(){
 		url  : "router.php",
 		data : {"function":"checkoutBook","copyID":input.trim(),"userID":username},
 		success : function(result){
+			if(result == 'FAILED')
+				alert("You have already checked out book " + input + " before.");
 			updateLib();
+			checkOutTable();
 		}
 	});
 });
@@ -190,6 +210,7 @@ $('#returnBookBtn').click(function(){
 		data : {"function":"returnBook","copyID":input.trim(),"userID":username},
 		success : function(result){
 			updateLib();
+			checkOutTable();
 		}
 	});
 	$("#returnBookText").val("");
@@ -199,6 +220,7 @@ $('#navbar-logout').click(function(){
 });
 $(document).ready(function(){
 	updateLib();
+	checkOutTable();
 	if(<?php echo $user->isLib() ?>)
 		$(".teacher").css("display","");
 	else
