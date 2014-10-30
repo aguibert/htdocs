@@ -46,12 +46,12 @@ function getMessages(){
 	var username = "<?php echo $_SESSION['user']; ?>";
 
 	$.ajax({
-		type	:"GET",
-		url		:"router.php",
-		data	:{
-					"function"	: "getmessages",
-					"username"	: username
-				},
+		type :"GET",
+		url	 :"router.php",
+		data :{
+			"function" : "getmessages", 
+			"username"	: username
+		},
 		success :function(result) {
 			$('#section-messages').html(result);
 		}
@@ -66,7 +66,7 @@ $('#message-send-btn').click(function() {
 		url:"router.php",
 		data:{"function":"postmessage","username":username,"msg":messageText},
 		success:function(result){
-			console.log(result)
+			getMessages();
 		}
 	});
 });

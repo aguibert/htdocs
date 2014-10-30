@@ -68,8 +68,8 @@ class DB
 	function getMessages($userName) {
 		$result = self::query("SELECT message.* 
 			FROM message join followers 
-			where followers.followername='".$userName."' 
-				and message.username=followers.followername");
+			WHERE followers.followername='".$userName."' 
+				and message.username=followers.followername ORDER BY posttime DESC");
 
 		while($row = mysqli_fetch_array($result)) {
 			echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
@@ -77,9 +77,7 @@ class DB
 	}
 
 	function postMessage($userName, $msg) {
-		//TODO format date/time
-		echo $userName.":".$msg.":".date('l jS \of F Y h:i:s A');
-		self::query("INSERT INTO message VALUES ('".$userName."','".$msg."','".date('l jS \of F Y h:i:s A')."')");
+		self::query("INSERT INTO message VALUES ('".$userName."','".$msg."',CURRENT_TIMESTAMP)");
 	}
 }
 ?>
