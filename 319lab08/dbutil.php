@@ -35,7 +35,6 @@ class DB
 		return $result;
 	}
 
-
 	function createUserOrLogin($username){
 		$result = self::query("SELECT * FROM usernames WHERE username='".$username."'");
 		if(!mysqli_fetch_array($result)){
@@ -43,6 +42,44 @@ class DB
 			self::query("INSERT INTO usernames VALUES ('".$username."')");
 			self::query("INSERT INTO followers VALUES ('".$username."','".$username."')");
 		}
+	}
+
+	function getFollowing($userName) {
+		$result = self::query("SELECT username FROM followers where followername='".$username."'");
+		while($row = mysqli_fetch_array($result)) {
+			// TODO output formating for each row in html
+
+		}
+	}
+
+	function getFollowers($userName) {
+		$result = self::query("SELECT followername FROM followers where username='".$username."'");
+		while($row = mysqli_fetch_array($result)) {
+			// TODO output formating for each row in html
+
+		}
+	}
+
+	//followerName will be set to follow userName
+	function setFollower($userName, $followerName) {
+		self::query("INSERT INTO followers VALUES ('".$userName."','".$followerName."')");
+	}
+
+	function getMessages($userName) {
+		$result = self::query("SELECT message.* 
+			FROM message join followers 
+			where followers.followername='".$userName."' 
+				and message.username=followers.followername");
+
+		while($row = mysqli_fetch_array($result)) {
+			echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
+		}
+	}
+
+	function postMessage($userName, $msg) {
+		//TODO format date/time
+		echo $userName.":".$msg.":".date('l jS \of F Y h:i:s A');
+		self::query("INSERT INTO message VALUES ('".$userName."','".$msg."','".date('l jS \of F Y h:i:s A')."')");
 	}
 }
 ?>
