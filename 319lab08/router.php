@@ -8,9 +8,20 @@ if(isset($_GET['function'])){
 		DB::getMessages($_GET['username']);
 		return;
 	}
-
 	if($function == 'postmessage') {
 		DB::postMessage($_GET['username'],$_GET['msg']);
+		return;
+	}
+	if($function == 'getfollowers') {
+		DB::getFollowers($_GET['username']);
+		return;
+	}
+	if($function == 'getfollowing') {
+		DB::getFollowing($_GET['username']);
+		return;
+	}
+	if($function == 'getlistoffollowable') {
+		DB::getListFollowable($_GET['username']);
 		return;
 	}
 }

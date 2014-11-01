@@ -44,31 +44,29 @@ class DB
 		}
 	}
 
-	function getFollowing($userName) {
+	function getFollowing($username) {
 		$result = self::query("SELECT username FROM followers where followername='".$username."'");
 		while($row = mysqli_fetch_array($result)) {
-			// TODO output formating for each row in html
-
+			echo "<h5>".$row['username']."</h5>";
 		}
 	}
 
-	function getFollowers($userName) {
+	function getFollowers($username) {
 		$result = self::query("SELECT followername FROM followers where username='".$username."'");
 		while($row = mysqli_fetch_array($result)) {
-			// TODO output formating for each row in html
-
+			echo "<h5>".$row['followername']."</h5>";
 		}
 	}
 
 	//followerName will be set to follow userName
-	function setFollower($userName, $followerName) {
-		self::query("INSERT INTO followers VALUES ('".$userName."','".$followerName."')");
+	function setFollower($username, $followerName) {
+		self::query("INSERT INTO followers VALUES ('".$username."','".$followerName."')");
 	}
 
-	function getMessages($userName) {
+	function getMessages($username) {
 		$result = self::query("SELECT message.* 
 			FROM message join followers 
-			WHERE followers.followername='".$userName."' 
+			WHERE followers.followername='".$username."' 
 				and message.username=followers.followername ORDER BY posttime DESC");
 
 		while($row = mysqli_fetch_array($result)) {
@@ -76,8 +74,18 @@ class DB
 		}
 	}
 
-	function postMessage($userName, $msg) {
-		self::query("INSERT INTO message VALUES ('".$userName."','".$msg."',CURRENT_TIMESTAMP)");
+	function postMessage($username, $msg) {
+		self::query("INSERT INTO message VALUES ('".$username."','".$msg."',CURRENT_TIMESTAMP)");
+	}
+
+	function getListFollowable($username) {
+		$result = self::query("SELECT username FROM usernames");
+
+		while($row = mysqli_fetch_array($result)) {
+			if($row['username'] != "" && $row['username'] != $username) {
+				echo "<a href='#' class='list-group-item'><div class='badge'>5</div>".$row['username']."</a>";
+			}
+		}
 	}
 }
 ?>
