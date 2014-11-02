@@ -66,6 +66,7 @@ $user = $_SESSION['user'];
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 <script>
+var gFollowers;
 $('#navbar-logout').click(function(){
 	window.location = window.location.pathname.replace("home.php", ""); 
 });
@@ -96,7 +97,13 @@ function getFollowers(){
 			"username"	: username
 		},
 		success :function(result) {
-			$('#section-followers').html(result);
+			var followers = JSON.parse(result);
+			gFollowers = followers;
+			var newHTML = "";
+			for(person in followers){
+				newHTML += "<h5>" + followers[person] + "</h5>";
+			}
+			$('#section-followers').html(newHTML);
 		}
 	});
 }
@@ -117,18 +124,16 @@ function getFollowing(){
 	});
 }
 
-$('#message-send-btn').click(function() {
-	var username = "<?php echo $_SESSION['user']; ?>";
-	var messageText = $('#message-text').val();
+function postMessageToDB(username, messageText){
 	$.ajax({
 		type:"GET",
 		url:"router.php",
 		data:{"function":"postmessage","username":username,"msg":messageText},
 		success:function(result){
-			getMessages();
+			alert("Message posted to DB");
 		}
 	});
-});
+}
 
 $('#follow-button').click(function() {
 	var username = "<?php echo $_SESSION['user']; ?>";
@@ -144,9 +149,41 @@ $('#follow-button').click(function() {
 
 
 $(document).ready(function(){
+	var username = "<?php echo $_SESSION['user']; ?>";
+	socket = new WebSocket("ws://127.0.0.1:8000/se319lab08");
+
+	function sendPayload(action, data){
+	   var payload = {};
+	   payload.action = action; 
+	   payload.data = data; 
+	   socket.send(JSON.stringify(payload));
+	}
+
 	getMessages();
 	getFollowers();
 	getFollowing();
+
+	$('#message-send-btn').click(function() {
+		var data = {};
+		data.username = username;
+		data.timestamp = Date.now();
+		data.messageText = $('#message-text').val();
+		data.followers = gFollowers; 
+		sendPayload('postMessage', data);
+		// postMessageToDB(data.username, data.messageText);
+		$('#message-text').val("");
+	});
+
+	socket.onopen = function (msg) {
+		var data = {};
+		data.username = username;
+		sendPayload('PairClient', data);
+	}
+	socket.onmessage = function (msg) {
+		console.log("got data: " + msg.data);
+		var msgData = JSON.parse(msg.data).data;
+	    $('#section-messages').prepend("<p><strong>" + msgData.username + "</strong>  " + (new Date(msgData.timestamp)).toLocaleString() + " <br>" + msgData.messageText + "</p>");
+	};
 });
 </script>
 </html>

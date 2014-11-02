@@ -8,6 +8,7 @@ namespace WebSocket\Application;
 class SE319Lab08 extends Application
 {
     private $_clients = array();
+    private $_clientNames = array();
 	private $_filename = '';
 
 	public function onConnect($client)
@@ -34,7 +35,10 @@ class SE319Lab08 extends Application
 		$actionName = '_action' . ucfirst($decodedData['action']);		
 		if(method_exists($this, $actionName))
 		{			
-			call_user_func(array($this, $actionName), $decodedData['data']);
+			if($actionName == '_actionPairClient')
+				$this->_actionPairClient($decodedData['data']['username'], $client);
+			else
+				call_user_func(array($this, $actionName), $decodedData['data']);
 		}
     }
 	
@@ -68,19 +72,24 @@ class SE319Lab08 extends Application
         }
 	}
 
-	private function _actionClientJoin($username){
-		echo "Client : ".$username." has joined!";
-	}
-
-	private function _actionClientLeave($username){
-		echo "Client : ".$username." has left.";
+	private function _actionPairClient($username, $client){
+		$clientID = $client->getClientId();
+		$this->_clientNames[$clientID] = $username;
+		echo "Client : ".$this->_clientNames[$clientID]." has joined!\n";
 	}
 
 	private function _actionPostMessage($data){
-		var_dump($data);
+		echo $data['username']." : ".$data['messageText']."\n";
+		$followers = $data['followers'];
 		$encodedData = $this->_encodeData('echo', $data);		
 		foreach($this->_clients as $sendto) {
-			$sendto->send($encodedData);
+			$curClient = $this->_clientNames[$sendto->getClientId()];
+			if(in_array($curClient, $followers)){
+				$sendto->send($encodedData);
+				echo "Sent data to client ".$curClient."\n";
+			} else {
+				echo "NOT sending data to client ".$curClient."\n";
+			}
         }
 	}
 	

@@ -52,10 +52,12 @@ class DB
 	}
 
 	function getFollowers($username) {
+		$followers = array();
 		$result = self::query("SELECT followername FROM followers where username='".$username."'");
 		while($row = mysqli_fetch_array($result)) {
-			echo "<h5>".$row['followername']."</h5>";
+			$followers[] = $row['followername'];
 		}
+		echo json_encode($followers); 
 	}
 
 	//followerName will be set to follow userName
