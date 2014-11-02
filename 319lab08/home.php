@@ -189,7 +189,7 @@ $(document).ready(function(){
 		data.messageText = $('#message-text').val();
 		data.followers = gFollowers; 
 		sendPayload('postMessage', data);
-		// postMessageToDB(data.username, data.messageText);
+		postMessageToDB(data.username, data.messageText);
 		$('#message-text').val("");
 	});
 
