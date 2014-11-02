@@ -1,0 +1,21 @@
+319 Group 10
+ - Jonathan Mielke
+ - Andrew Guibert
+ - Lucas Rohret
+
+
+
+Lab 08 - Ajax/COMET/Websockets
+
+TO RUN:
+
+ 1 - start XAMPP server
+
+ 2 - start the websocket server
+     located in <submission-zip>/websocket-server/server/server.php
+     run: "php server.php" from the /websocket-server/server directory
+
+ 3 - open web browser and go to: localhost:8080/319lab08/
+
+ 4 - login with accounts 'aguibert' or 'jdmielke' to see existing accounts
+     or create a new account by typing in a new username
