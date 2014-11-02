@@ -157,7 +157,7 @@ class Server extends Socket
 			);
 			$this->applications[$key]->setServerInfo($serverInfo);
 		}
-		$this->log("AGG: registered application ".$key);
+		$this->log("Registered application: ".$key);
     }
     
 	/**
