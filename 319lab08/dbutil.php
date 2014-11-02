@@ -71,9 +71,12 @@ class DB
 			WHERE followers.followername='".$username."' 
 				and message.username=followers.username ORDER BY posttime DESC");
 
+		$messages = array();
 		while($row = mysqli_fetch_array($result)) {
-			echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
+			$messages[] = array('username' => $row['username'], 'posttime' => $row['posttime'], 'msg' => $row['msg']);
+			// echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
 		}
+		echo json_encode($messages);
 	}
 
 	function postMessage($username, $msg) {

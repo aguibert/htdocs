@@ -19,29 +19,32 @@ $user = $_SESSION['user'];
 	<div class="row">
 		<div class="col-md-2 col-md-offset-1">
 			<div>
-				<h2>Following</h2>
-				<button id="follow-button" class="btn btn-primary btn-block btn-xs" data-toggle="modal" data-target="#follow-modal">Follow</button>
+				<h2>You Are Following</h2>
+				<hr>
 				<div id="section-following">
 				</div>
+				<hr>
+				<button id="follow-button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#follow-modal">Follow</button>
 			</div>
 		</div>
 		<div id="sections" class="col-md-6">
 			<div id="section-head" class="jumbotron">
-				<h1>Welcome <?php echo $user ?></h1>
+				<h1 class='text-center'>Welcome <?php echo $user ?></h1>
 			</div>
 			<hr>
 			<div id="section-post" class="input-group">
-				<input id="message-text" type="text" placeholder="message" class="form-control"></input>
+				<input id="message-text" type="text" placeholder="Type a message here" class="form-control"></input>
 				<div class="input-group-btn">
 					<button id="message-send-btn" type="button" class="btn btn-primary">Send</button>
 				</div>
 			</div>
 			<hr>
-			<div id="section-messages"></div>
+			<div id="section-messages" style="overflow-y:auto;height:500px"></div>
 		</div>
 		<div class="col-md-2">
 			<div>
-				<h2>Followers</h2>
+				<h2>Your Followers</h2>
+				<hr>
 				<div id="section-followers">
 				</div>
 			</div>
@@ -70,6 +73,18 @@ var gFollowers;
 $('#navbar-logout').click(function(){
 	window.location = window.location.pathname.replace("home.php", ""); 
 });
+function addMessage(username, posttime, msg){
+    $(" \
+    	<div class='panel panel-primary'> \
+    		<div class='panel-heading'> \
+    			<strong>" + username + "</strong>   \
+    			<div class='pull-right'>" + (new Date(posttime)).toLocaleString() + "</div> \
+    		</div> \
+    		<div class='panel-body' style='word-wrap:break-word'>" + msg + "</div> \
+    	</div> \
+    ").hide().prependTo('#section-messages').fadeIn("slow").slideDown();
+    	// <p><strong>" + username + "</strong>  " + (new Date(posttime)).toLocaleString() + " <br>" + msg + "</p> \
+}
 function getMessages(){
 	var username = "<?php echo $_SESSION['user']; ?>";
 
@@ -81,7 +96,10 @@ function getMessages(){
 			"username"	: username
 		},
 		success :function(result) {
-			$('#section-messages').html(result);
+			var messages = JSON.parse(result);
+			for(i = messages.length-1; i >= 0; i--){
+				addMessage(messages[i]['username'], messages[i]['posttime'], messages[i]['msg'])
+			}
 		}
 	});
 }
@@ -128,10 +146,7 @@ function postMessageToDB(username, messageText){
 	$.ajax({
 		type:"GET",
 		url:"router.php",
-		data:{"function":"postmessage","username":username,"msg":messageText},
-		success:function(result){
-			alert("Message posted to DB");
-		}
+		data:{"function":"postmessage","username":username,"msg":messageText}
 	});
 }
 
@@ -201,7 +216,7 @@ $(document).ready(function(){
 	socket.onmessage = function (msg) {
 		console.log("got data: " + msg.data);
 		var msgData = JSON.parse(msg.data).data;
-	    $('#section-messages').prepend("<p><strong>" + msgData.username + "</strong>  " + (new Date(msgData.timestamp)).toLocaleString() + " <br>" + msgData.messageText + "</p>");
+		addMessage(msgData.username, msgData.timestamp, msgData.messageText);
 	};
 });
 </script>

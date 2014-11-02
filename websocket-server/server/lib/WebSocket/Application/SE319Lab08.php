@@ -81,7 +81,11 @@ class SE319Lab08 extends Application
 	private function _actionPostMessage($data){
 		echo $data['username']." : ".$data['messageText']."\n";
 		$followers = $data['followers'];
-		$encodedData = $this->_encodeData('echo', $data);		
+
+		// Don't need to resend the follower information
+		$newData = array("username" => $data['username'], "timestamp" => $data['timestamp'], "messageText" => $data['messageText']);
+		$encodedData = $this->_encodeData('echo', $newData);		
+
 		foreach($this->_clients as $sendto) {
 			$curClient = $this->_clientNames[$sendto->getClientId()];
 			if(in_array($curClient, $followers)){
