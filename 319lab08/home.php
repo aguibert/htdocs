@@ -9,7 +9,7 @@ $user = $_SESSION['user'];
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body> 
 	<nav class="navbar navbar-inverse" role="navigation">
 		<ul class="nav navbar-nav navbar-right">
 			<li><button id="navbar-logout" type="button" class="btn btn-danger navbar-btn ">Logout</button></li>
@@ -59,7 +59,9 @@ $user = $_SESSION['user'];
 				</div>
 				<div class="modal-body">
 					<div id="follow-list-area" class="list-group">
-						
+						<div align="center">
+							<img src="images/spinner.gif" />
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -83,7 +85,6 @@ function addMessage(username, posttime, msg){
     		<div class='panel-body' style='word-wrap:break-word'>" + msg + "</div> \
     	</div> \
     ").hide().prependTo('#section-messages').fadeIn("slow").slideDown();
-    	// <p><strong>" + username + "</strong>  " + (new Date(posttime)).toLocaleString() + " <br>" + msg + "</p> \
 }
 function getMessages(){
 	var username = "<?php echo $_SESSION['user']; ?>";
@@ -137,7 +138,11 @@ function getFollowing(){
 			"username"	: username
 		},
 		success :function(result) {
-			$('#section-following').html(result);
+			var following = JSON.parse(result);
+			var newHTML = "";
+			for(i in following)
+				newHTML += "<h5>"+following[i]+"</h5>";
+			$('#section-following').html(newHTML);
 		}
 	});
 }

@@ -45,10 +45,13 @@ class DB
 	}
 
 	function getFollowing($username) {
+		$following = array();
 		$result = self::query("SELECT username FROM followers where followername='".$username."'");
 		while($row = mysqli_fetch_array($result)) {
-			echo "<h5>".$row['username']."</h5>";
+			$following[] = $row['username'];
+			// echo "<h5>".$row['username']."</h5>";
 		}
+		echo json_encode($following);
 	}
 
 	function getFollowers($username) {
@@ -74,7 +77,6 @@ class DB
 		$messages = array();
 		while($row = mysqli_fetch_array($result)) {
 			$messages[] = array('username' => $row['username'], 'posttime' => $row['posttime'], 'msg' => $row['msg']);
-			// echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
 		}
 		echo json_encode($messages);
 	}
