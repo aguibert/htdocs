@@ -143,6 +143,25 @@ $('#follow-button').click(function() {
 		data:{"function":"getlistoffollowable","username":username},
 		success:function(result){
 			$('#follow-list-area').html(result);
+
+			$('.list-group-item').click(function() {
+				var followable = $(this).clone().children().remove().end().text();
+
+				$.ajax({
+					type :"GET",
+					url	 :"router.php",
+					data :{
+						"function" 		: "setFollow", 
+						"followable"	: followable,
+						"username"		: username 
+					},
+					success :function(result) {
+						$('#follow-modal').modal('toggle');
+						getMessages();
+						getFollowing();
+					}
+				});
+			});			
 		}
 	});
 });

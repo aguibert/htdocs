@@ -24,5 +24,10 @@ if(isset($_GET['function'])){
 		DB::getListFollowable($_GET['username']);
 		return;
 	}
+
+	if($function == 'setFollow') {
+		DB::setFollower($_GET['followable'], $_GET['username']);
+		return;
+	}
 }
 ?>

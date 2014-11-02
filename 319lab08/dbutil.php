@@ -66,10 +66,10 @@ class DB
 	}
 
 	function getMessages($username) {
-		$result = self::query("SELECT message.* 
-			FROM message join followers 
+		$result = self::query("SELECT message.msg, message.posttime, followers.username 
+			FROM message JOIN followers 
 			WHERE followers.followername='".$username."' 
-				and message.username=followers.followername ORDER BY posttime DESC");
+				and message.username=followers.username ORDER BY posttime DESC");
 
 		while($row = mysqli_fetch_array($result)) {
 			echo "<p><strong>".$row['username']."</strong>  ".$row['posttime']."<br>".$row['msg']."</p>";
@@ -81,11 +81,12 @@ class DB
 	}
 
 	function getListFollowable($username) {
-		$result = self::query("SELECT username FROM usernames");
+		$result = self::query("SELECT username FROM usernames WHERE NOT (username = '".$username."')");
 
 		while($row = mysqli_fetch_array($result)) {
-			if($row['username'] != "" && $row['username'] != $username) {
-				echo "<a href='#' class='list-group-item'><div class='badge'>5</div>".$row['username']."</a>";
+			if($row['username'] != "") {
+				$numFollowers = self::query("SELECT followername FROM followers where username='".$row['username']."'");
+				echo "<a href='' class='list-group-item'><div class='badge'>".mysqli_num_rows($numFollowers)."</div>".$row['username']."</a>";
 			}
 		}
 	}
