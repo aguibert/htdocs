@@ -42,10 +42,6 @@ $user = unserialize($_SESSION['user']);
 	<div id="mymodal" class="modal fade">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-	        <h4 class="modal-title">Modal title</h4>
-	      </div>
 	      <input id="modal-copyid" type="hidden" value="">
 	      <div class="modal-body" align="center">
 	      </div>
@@ -60,7 +56,7 @@ $user = unserialize($_SESSION['user']);
 </body>
 <script>
 function showModal(title, body, copyID){
-    	$('#mymodal .modal-title').html(title);
+    	// $('#mymodal .modal-title').html(title);
     	$('#mymodal .modal-body').html(body);
     	$('#modal-copyid').val(copyID);
         $('#mymodal').modal('show');

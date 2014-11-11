@@ -32,7 +32,7 @@ $user = unserialize($_SESSION['user']);
 		<div class="row student" style="display:none">
 			<div class="col-md-5">
 				<h2>User use cases</h2>
-				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button">Return a Movie</button><br>
+				<input id="returnBookText" type="text" placeholder="Copyid"> <button id="returnBookBtn" type="button" class="btn btn-success">Return a Movie</button><br>
 			</div>
 			<div class="col-md-5">
 				<h3>Outstanding rentals</h3>
@@ -47,11 +47,12 @@ $user = unserialize($_SESSION['user']);
 				<h3><u>Add a Movie</u></h3>
 				<input id="addBookName" name="addBookName" type="text" placeholder="MovieName"> <br>
 				<input id="addAuthor" name="addAuthor" type="text" placeholder="Director"><br>
-				<input id="addQty" name="addQty" type="text" placeholder="Qty">
-				<button id="addBookBtn" type="submit" value="addBook">Add a Movie</button>
+				<input id="addQty" name="addQty" type="text" placeholder="Qty"><br><br>
+				<button id="addBookBtn" type="submit" value="addBook" class="btn btn-success">Add a Movie</button>
 				<hr>
 				<h3><u>Query Rental History</u></h3>
-				<input id="viewUserHistory" type="text" placeholder="Username"> <button id="viewLoansBtn" type="button">View history</button><br>
+				<input id="viewUserHistory" class="form-control" type="text" placeholder="Username"> <br>
+				<button id="viewLoansBtn" type="button" class="btn btn-success">View history</button>
 			</div>
 			<div class="col-md-7">
 				<h2 id="loanHeader">View Rental History by User</h2>
