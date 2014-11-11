@@ -70,25 +70,28 @@ validation();
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">	
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
+<title>Unified Rental Service - Register</title>
 <body>
 
 <div id="register" class="col-md-8 col-md-offset-2">
-<fieldset>
-<h1>Register</h1>
-<form action="" method="post"> 
-	Username<br><input name="username" type="text" placeholder="Username" required><br>
-	Password<br><input name="password" type="text" placeholder="********" required><br>
-	Confirm Password<br><input name="confPass" type="text" placeholder="********" required><br>
-	Email<br><input name="email"    type="text" placeholder="xxx@xxx.xxx" required><br>
-	Phone<br><input name="phone"    type="text" placeholder="xxx-xxx-xxxx" ><br>
-	Librarian or Not<br><input name="isLib"    type="text"   placeholder="true or false" ><br>
-	First Name<br><input name="firstName" type="text"  placeholder="First name" required><br>
-	Last Name<br><input name="lastName"  type="text"  placeholder="Last name" required><br>
+<h1>Registration</h1>
+<hr>
+<div class="urs-container">
+<form  action="" method="post"> 
+	<h5>Username</h5><input name="username" type="text" placeholder="Username" required><br>
+	<h5>Password</h5><input name="password" type="text" placeholder="********" required><br>
+	<h5>Confirm Password</h5><input name="confPass" type="text" placeholder="********" required><br>
+	<h5>Email</h5><input name="email"    type="text" placeholder="xxx@xxx.xxx" required><br>
+	<h5>Phone</h5><input name="phone"    type="text" placeholder="xxx-xxx-xxxx" ><br>
+	<h5>Is Administrator</h5><input name="isLib"    type="text"   placeholder="true or false" ><br>
+	<h5>First Name</h5><input name="firstName" type="text"  placeholder="First name" required><br>
+	<h5>Last Name</h5><input name="lastName"  type="text"  placeholder="Last name" required><br>
 	<br>
 	<input type="submit" class="btn btn-success" value="Register"> 
 </form>
-</fieldset>
+</div>
 </div>
 
 </body>

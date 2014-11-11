@@ -8,7 +8,6 @@ class Library
 	const SHELF_COUNT = 10;
 
 	public static function showLib(){
-		echo "<TR class='success'><TH colspan='1'>Shelf #</TH><TH colspan='10'>Copy ID</TH><TR>";
 		// for each shelf
 		$done = false;
 		$shelfIDs = self::getShelfIDs();
@@ -16,13 +15,17 @@ class Library
 			$shelfID = $shelfIDs[$i];
 			// for each book
 			$books = Shelf::getBooksOnShelf($shelfID);
-				// print book name
-			$rowStr = "<TR><TD class='active'><b>".($i + 1)."<b></TD>";
+     		// print book name
+     		$rowStr = "<TR>";
 			for($j = 0; $j < Shelf::MAX_SIZE; $j++){
-				if(count($books) > $j && $book = $books[$j])
-					$rowStr .= "<TD class='book'>". $book->getCopyID() ."</TD>";
-				else
-					$rowStr .= "<TD></TD>";
+				if(count($books) > $j && $book = $books[$j]){
+					// $rowStr .= "<TD class='book'>". $book->getCopyID() ."</TD>";
+					$rowStr .= "<TD class='book' style='border-top:none'>";
+					$rowStr .= "<img class='span1' src='images/". $book->getTitle() .".jpg' alt='". $book->getTitle() ."' />"; // width=50% height=175
+					$rowStr .= "<input type='hidden' value='". $book->getCopyID() ."'>";
+					$rowStr .= "</TD>";
+				} else
+					$rowStr .= "<TD style='border-top:none'></TD>";
 			}
 			$rowStr .= "</TR>";
 			// Only print row if there is content

@@ -19,9 +19,10 @@ if(isset($_GET['function'])){
 	}
 	if($function == 'getBookInfo'){
 		$book = Library::getBook($_GET['copyID']);
-		echo "Title:\t\t".$book->getTitle().
-			 "<BR>Author:\t".$book->getAuthor().
-			 "<BR>Book ID:\t".$book->getID().
+		echo "<h1 style='color:#333333'>".$book->getTitle()."</h1>".
+		     "<img src='images/".$book->getTitle().".jpg' alt='".$book->getTitle()."' border=10 style='width:500;'/>".
+			 "<BR><BR>Director:\t".$book->getAuthor().
+			 "<BR>Movie ID:\t".$book->getID().
 			 "<BR>Copy ID:\t".$book->getCopyID();
 	 	return;
 	}
@@ -48,14 +49,6 @@ if(isset($_GET['function'])){
 		$bookName = $_GET['bookName'];
 		$author   = $_GET['author'];
 		$qty      = $_GET['qty'];
-		if(!ctype_alnum($bookName)){
-			echo "Invalid bookname: " .$bookName;
-			return;
-		}
-		if(!ctype_alnum($author)){
-			echo "Invalid author: " .$author; 
-			return;
-		}
 		if(!ctype_digit($qty)){
 			echo "Invalid qty: " .$qty;
 			return;
