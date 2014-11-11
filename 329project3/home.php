@@ -4,6 +4,10 @@ require_once('objects/book.php');
 require_once('objects/library.php');
 session_start();
 $user = unserialize($_SESSION['user']);
+
+mail("andy.guibert@gmail.com",
+	'[Unified Rental Service] Upcoming rental deadline',
+	'One of your rentals is due today, make sure you bring that back to us!');
 ?>
 
 <html>
@@ -24,7 +28,7 @@ $user = unserialize($_SESSION['user']);
 			<li><a href="manage.php">Account Management</a></li>
 		</ul>
 	    <ul class="nav navbar-nav navbar-right">
-			<li><button type="button" class="btn btn-danger navbar-btn"><a href="index.php">Logout <?php echo $user->getUsername() ?></a></button></li>
+			<li><button type="button" class="btn btn-danger navbar-btn" onclick="logout()">Logout <?php echo $user->getUsername() ?></button></li>
 			<li><a style="padding-right:10px"></a>
 		</ul>
 		</div>
@@ -55,6 +59,36 @@ $user = unserialize($_SESSION['user']);
 	</div><!-- /.modal -->
 </body>
 <script>
+function logout(){
+	window.location.href = "index.php";
+}
+function checkRentalDue(){
+	if(<?php echo $user->isLib() ?>)
+		return;
+	var username = "<?php echo $user->getUsername() ?>";
+	$.ajax({
+		type : "GET",
+		url  : "router.php",
+		data : {"function":"checkDueToday","userID":username},
+		success : function(result){
+			if(result == "PASSED"){
+				sendMail();
+			}
+		}
+	});
+}
+function sendMail(){
+	var userEmail = "<?php echo $user->getEmail() ?>";
+	$.ajax({
+		type : "GET",
+		url  : "router.php",
+		data : {"function":"email","userEmail":userEmail},
+		success : function(result){
+			if(result != "")
+				alert(result);
+		}
+	});
+}
 function showModal(title, body, copyID){
     	// $('#mymodal .modal-title').html(title);
     	$('#mymodal .modal-body').html(body);
@@ -183,6 +217,7 @@ $(document).ready(function(){
 	else
 		$(".student").css("display","");
 	$('#deleteBookBtn').click(removeBook);
+	checkRentalDue();
 });
 </script>
 </html>

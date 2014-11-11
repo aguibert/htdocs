@@ -38,6 +38,10 @@ class User
 		return $this->_first;
 	}
 
+	public function getEmail(){
+		return $this->_email;
+	}
+
 	public static function viewLoanHistory($userName, $exact){
 		$conn = DB::getConnection();
 		echo "<TR class='info'><TH>Copy ID</TH><TH>Username</TH><TH>Due Date</TH><TH>Date Returned</TH><TR>";
@@ -165,6 +169,20 @@ class User
 		}
 
 		return $user;
+	}
+
+	public static function hasRentalDueToday($userName){
+		$conn = DB::getConnection();
+		if(!$userName){
+			return;
+		}
+		$result = mysqli_query($conn, "SELECT * FROM loanHistory where Groupnumber=10 and Duedate=CURDATE() and Username='".$userName."' and Returnedondate is NULL");
+		while($row = mysqli_fetch_array($result)){
+			echo "PASSED";
+			return;
+		}
+		echo "FAILED";
+		return;
 	}
 }
 ?>

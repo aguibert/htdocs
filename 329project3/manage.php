@@ -21,7 +21,7 @@ $user = unserialize($_SESSION['user']);
 			<li class="active"><a href="#">Account Management</a></li>
 		</ul>
 	    <ul class="nav navbar-nav navbar-right">
-			<li><button type="button" class="btn btn-danger navbar-btn"><a href="index.php">Logout <?php echo $user->getUsername() ?></a></button></li>
+			<li><button type="button" class="btn btn-danger navbar-btn" onclick="logout()">Logout <?php echo $user->getUsername() ?></button></li>
 			<li><a style="padding-right:10px"></a>
 		</ul>
 		</div>
@@ -66,6 +66,9 @@ $user = unserialize($_SESSION['user']);
 </body>
 </html>
 <script type="text/javascript">
+function logout(){
+	window.location.href = "index.php";
+}
 function checkOutTable(){
 	var username = "<?php echo $user->getUsername() ?>";
 	$.ajax({

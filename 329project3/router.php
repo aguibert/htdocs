@@ -2,6 +2,8 @@
 require_once('objects/library.php');
 require_once('objects/user.php');
 
+session_start();
+
 if(isset($_GET['function'])){
 	$function = $_GET['function'];
 
@@ -54,6 +56,28 @@ if(isset($_GET['function'])){
 			return;
 		}
 		echo "PASSED";
+		return;
+	}
+	if($function == 'email'){
+		if(!isset($_SESSION['notified'])){
+			$userEmail = $_GET['userEmail'];
+			if(mail($userEmail,
+					'[Unified Rental Service] Upcoming rental deadline',
+					'One of your rentals is due today, make sure you bring that back to us!'))
+			{
+				$_SESSION['notified'] = true;
+				echo "You have a rental due today!\nAn email reminder has been sent to:\n".$userEmail;
+				return;
+			}
+			echo "Unable to send an email reminder to your email address at\n".$userEmail;
+			return;
+		} else {
+			return;
+		}
+	}
+	if($function == 'checkDueToday'){
+		$userName = $_GET['userID'];
+		User::hasRentalDueToday($userName);
 		return;
 	}	
 }
